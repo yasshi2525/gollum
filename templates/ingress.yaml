@@ -11,7 +11,7 @@ spec:
           - path: /gollum/
             backend:
               serviceName: {{ .Release.Name }}-gollum
-              servicePort: 80
+              servicePort: 4567
   {{- if .Values.tls.enabled }}
   tls:
     - hosts:
