@@ -21,6 +21,7 @@ spec:
       containers:
         - name: gollum
           image: suttang/gollum
+          args: ["--base-path", "/gollum"]
           ports:
             - containerPort: 4567
           volumeMounts:
