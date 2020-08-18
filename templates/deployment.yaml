@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-gollum
+  namespace: {{ .Release.Namespace }}
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-gollum
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-gollum
+    spec:
+      containers:
+        - name: gollum
+          image: suttang/gollum
+          ports:
+            - containerPort: 4567
+          volumeMounts:
+            - name: markdown
+              mountPath: /root/wikidata
+              subPath: {{ .Release.Name }}-wikidata
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128M
+            limits:
+              cpu: 1000m
+              memory: 1024M
+      volumes:
+        - name: markdown
+        {{- if .Values.pv.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-storage-claim
+        {{- else }}
+          emptyDir: {}
+        {{- end -}}

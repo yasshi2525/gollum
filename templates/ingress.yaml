@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  namespace: {{ .Release.Namespace }}
+spec:
+  rules:
+    - host: {{ .Values.hostname }}
+      http:
+        paths:
+          - path: /gollum/
+            backend:
+              serviceName: {{ .Release.Name }}-gollum
+              servicePort: 80
+  {{- if .Values.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.hostname }}
+      secretName: {{ .Release.Name }}-tls
+  {{- end -}}
