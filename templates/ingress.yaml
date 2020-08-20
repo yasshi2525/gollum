@@ -12,6 +12,10 @@ spec:
             backend:
               serviceName: {{ .Release.Name }}-gollum
               servicePort: 4567
+          - path: /docsify/
+            backend:
+              serviceName: {{ .Release.Name }}-docsify
+              servicePort: 3000
   {{- if .Values.tls.enabled }}
   tls:
     - hosts:

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-gollum
+  name: {{ .Release.Name }}-wiki
   namespace: {{ .Release.Namespace }}
 spec:
   strategy:
@@ -12,11 +12,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-gollum
+      app: {{ .Release.Name }}-wiki
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-gollum
+        app: {{ .Release.Name }}-wiki
     spec:
       containers:
         - name: gollum
@@ -25,9 +25,24 @@ spec:
           ports:
             - containerPort: 4567
           volumeMounts:
-            - name: markdown
+            - name: wiki
               mountPath: /root/wikidata
-              subPath: {{ .Release.Name }}-wikidata
+              subPath: {{ .Release.Name }}-gollum
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128M
+            limits:
+              cpu: 1000m
+              memory: 1024M
+        - name: docsify
+          image: littlstar/docker-docsify
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: wiki
+              mountPath: /usr/local/docsify
+              subPath: {{ .Release.Name }}-docsify
           resources:
             requests:
               cpu: 100m
@@ -36,7 +51,7 @@ spec:
               cpu: 1000m
               memory: 1024M
       volumes:
-        - name: markdown
+        - name: wiki
         {{- if .Values.pv.enabled }}
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-storage-claim

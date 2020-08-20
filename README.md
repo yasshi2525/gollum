@@ -1,4 +1,4 @@
-## rushmini-server
+## wiki
 
 ### 前提
 

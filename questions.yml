@@ -28,7 +28,6 @@ questions:
         default: |-
           -----BEGIN PRIVATE KEY-----
           -----END PRIVATE KEY-----
-    group: SSL settings
 
   - variable: pv.enabled
     label: Uses PersistentVolume
@@ -48,4 +47,3 @@ questions:
         type: string
         default: 10Gi
         required: true
-    group: Storage settings
