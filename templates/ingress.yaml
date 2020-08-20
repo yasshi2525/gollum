@@ -10,11 +10,11 @@ spec:
         paths:
           - path: /gollum/
             backend:
-              serviceName: {{ .Release.Name }}-gollum
+              serviceName: {{ .Release.Name }}-wiki
               servicePort: 4567
           - path: /docsify/
             backend:
-              serviceName: {{ .Release.Name }}-docsify
+              serviceName: {{ .Release.Name }}-wiki
               servicePort: 3000
   {{- if .Values.tls.enabled }}
   tls:
